@@ -9,6 +9,9 @@ using Autodesk.Revit.UI;
 
 namespace IncrementalNumbering.Model
 {
+    /// <summary>
+    /// https://github.com/jeremytammik/RevitSdkSamples/tree/master/SDK/Samples/ModelessDialog/ModelessForm_ExternalEvent/CS
+    /// </summary>
     public class RequestHandler : IExternalEventHandler
     {
         public string m_StartNumber { get; set; }
