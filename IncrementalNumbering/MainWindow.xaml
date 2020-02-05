@@ -1,0 +1,23 @@
+﻿<Window x:Class="IncrementalNumbering.MainWindow"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IncrementalNumbering"
+             xmlns:vm="clr-namespace:IncrementalNumbering.ViewModel"
+             mc:Ignorable="d" Height="151.333" Width="215.999" Opacity="1" Topmost="True" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ShowInTaskbar="True" Title="Number elements">
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        
+        <StackPanel VerticalAlignment="Center" Margin="0,0,0,0" Width="120">
+            <TextBlock Text="Parameter name:" />
+            <TextBox TextAlignment="Center" Margin="0,0,0,5"  Height="16" TextOptions.TextFormattingMode="Display" Text="{Binding ParameterName}"/>
+            <TextBlock Text="Start value:" />
+            <TextBox TextAlignment="Center" Margin="0,0,0,5" Height="16" TextOptions.TextFormattingMode="Display" Text="{Binding StartNumber}"/>
+        <Button Content="Increment number" Width="120" Height="35"     Command="{Binding IncrementCommand}" Margin="0,0,0,10"/>
+        </StackPanel>
+    </Grid>
+</Window>

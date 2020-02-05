@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+  <AddIn Type="Command">
+    <Text>Command IncrementalNumbering</Text>
+    <Description>Some description for IncrementalNumbering</Description>
+    <Assembly>IncrementalNumbering.dll</Assembly>
+    <FullClassName>IncrementalNumbering.Command</FullClassName>
+    <ClientId>152b7dab-8bf9-456f-9463-459543de6ada</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+  <AddIn Type="Application">
+    <Name>Application IncrementalNumbering</Name>
+    <Assembly>IncrementalNumbering.dll</Assembly>
+    <FullClassName>IncrementalNumbering.App</FullClassName>
+    <ClientId>9cbf3453-9462-4a5b-88ec-7efd1e8fa968</ClientId>
+    <VendorId>com.typepad.thebuildingcoder</VendorId>
+    <VendorDescription>The Building Coder, http://thebuildingcoder.typepad.com</VendorDescription>
+  </AddIn>
+</RevitAddIns>
