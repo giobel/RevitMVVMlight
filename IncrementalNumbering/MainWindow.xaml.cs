@@ -27,9 +27,8 @@ namespace IncrementalNumbering
         private void CategoriesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             parameters.SelectedIndex = -1;
-
-            parameters.Items.Clear();
-
+            parameters.ClearValue(ItemsControl.ItemsSourceProperty);
+            
             parameters.ItemsSource = GetParamValues(_doc, cboxCategories.SelectedItem as Category);
 
             parameters.DisplayMemberPath = "Definition.Name";
@@ -103,12 +102,18 @@ namespace IncrementalNumbering
 
             IList<Element> elements = new FilteredElementCollector(doc).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements();
 
-            foreach (Element element in elements)
+            try
             {
-                string paramValue = element.LookupParameter(p.Definition.Name).AsValueString();
-                if (!results.Contains(paramValue))
-                    results.Add(paramValue);
+                foreach (Element element in elements)
+                {
+                    string paramValue = element.LookupParameter(p.Definition.Name).AsValueString();
+                    if (!results.Contains(paramValue))
+                        results.Add(paramValue);
+                }
+
             }
+
+            catch { };
 
             return results;
         }

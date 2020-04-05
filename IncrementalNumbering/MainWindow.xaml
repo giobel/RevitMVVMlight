@@ -19,7 +19,6 @@
             <ComboBox x:Name="parameters" Margin="0,0,0,5"     SelectedItem="{Binding SelectedParameter}" SelectionChanged="parameters_SelectionChanged"></ComboBox>
             <TextBlock Text="Operator:" />
             <ComboBox x:Name="operatorValue" Margin="0,0,0,5" SelectedItem="{Binding OperatorValue}"/>
-            <TextBox Text="{Binding SelectedCategory}"  />
             <TextBlock Text="Value:" />
             <ComboBox x:Name="parameterValue" Margin="0,0,0,5" SelectedItem="{Binding SelectedValue}"></ComboBox>
             <Button Content="Select elements" Width="120" Height="35"     Command="{Binding IncrementCommand}" Margin="0,10,0,10"/>
