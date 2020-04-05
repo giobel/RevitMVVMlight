@@ -1,6 +1,8 @@
 using Autodesk.Revit.UI;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using System.Collections.Generic;
+using Autodesk.Revit.DB;
 
 namespace IncrementalNumbering.ViewModel
 {
@@ -15,7 +17,7 @@ namespace IncrementalNumbering.ViewModel
         #region ParameterName
         //string _parameterName;
 
-        public string ParameterName { get; set; }
+        public Parameter SelectedParameter { get; set; }
         //{
         //    get
         //    {
@@ -33,6 +35,8 @@ namespace IncrementalNumbering.ViewModel
         
         public string StartNumber { get; set; }
 
+        public List<string> Categories { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
@@ -42,8 +46,7 @@ namespace IncrementalNumbering.ViewModel
 
             exEvent = ExternalEvent.Create(Handler);
 
-            uidoc = Command._activeRevitUIDoc;
-
+            uidoc = Command._activeRevitUIDoc;            
         }
 
         //Command to be called from MainWindow
@@ -58,7 +61,7 @@ namespace IncrementalNumbering.ViewModel
         private void Increment()
         {
             Handler.m_StartNumber = StartNumber;
-            Handler.m_ParameterName = ParameterName;
+            Handler.m_ParameterName = SelectedParameter;
             MakeRequest(Model.Request.RequestId.Increment);
         }
 

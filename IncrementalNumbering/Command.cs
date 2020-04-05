@@ -25,7 +25,7 @@ namespace IncrementalNumbering
             UIApplication uiapp = commandData.Application;
             UIDocument uidoc = uiapp.ActiveUIDocument;
 
-            MainWindow mw = new MainWindow();
+            MainWindow mw = new MainWindow(uidoc.Document);
 
             //https://thebuildingcoder.typepad.com/blog/2012/10/ensure-wpf-add-in-remains-in-foreground.html
             //https://thebuildingcoder.typepad.com/blog/2018/11/revit-window-handle-and-parenting-an-add-in-form.html

@@ -15,7 +15,7 @@ namespace IncrementalNumbering.Model
     public class RequestHandler : IExternalEventHandler
     {
         public string m_StartNumber { get; set; }
-        public string m_ParameterName { get; set; }
+        public Parameter m_ParameterName { get; set; }
 
         private Request m_request = new Request();
 
