@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IncrementalNumbering"
              xmlns:vm="clr-namespace:IncrementalNumbering.ViewModel"
-             mc:Ignorable="d" Height="300" Width="250" Opacity="1" Topmost="True" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ShowInTaskbar="True" Title="Number elements">
+             mc:Ignorable="d" Height="300" Width="250" Opacity="1" Topmost="True" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ShowInTaskbar="True" Title="Filter Elements Selector">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
@@ -14,20 +14,15 @@
         
         <StackPanel VerticalAlignment="Center" Margin="0,0,0,0" Width="200">
             <TextBlock Text="Select a category:" />
-            <ComboBox x:Name="cboxCategories" Margin="0,5,0,5" SelectionChanged="ComboBox_SelectionChanged"></ComboBox>
+            <ComboBox x:Name="cboxCategories" Margin="0,5,0,5" SelectionChanged="CategoriesComboBox_SelectionChanged" SelectedItem="{Binding SelectedCategory}"></ComboBox>
             <TextBlock Text="Select a parameter:" />
-            <ComboBox x:Name="parameters" Margin="0,0,0,5"     SelectedItem="{Binding SelectedParameter}"></ComboBox>
+            <ComboBox x:Name="parameters" Margin="0,0,0,5"     SelectedItem="{Binding SelectedParameter}" SelectionChanged="parameters_SelectionChanged"></ComboBox>
             <TextBlock Text="Operator:" />
-            <ComboBox x:Name="operatorValue" Margin="0,0,0,5" SelectionChanged="operatorValue_SelectionChanged"></ComboBox>
-
+            <ComboBox x:Name="operatorValue" Margin="0,0,0,5" SelectedItem="{Binding OperatorValue}"/>
+            <TextBox Text="{Binding SelectedCategory}"  />
             <TextBlock Text="Value:" />
-            <ComboBox x:Name="parameterValue" Margin="0,0,0,5"></ComboBox>
-
-
-            
-            <TextBlock Text="Start value:" />
-            <TextBox TextAlignment="Center" Margin="0,0,0,5" Height="16" TextOptions.TextFormattingMode="Display" Text="{Binding StartNumber}"/>
-        <Button Content="Increment number" Width="120" Height="35"     Command="{Binding IncrementCommand}" Margin="0,0,0,10"/>
+            <ComboBox x:Name="parameterValue" Margin="0,0,0,5" SelectedItem="{Binding SelectedValue}"></ComboBox>
+            <Button Content="Select elements" Width="120" Height="35"     Command="{Binding IncrementCommand}" Margin="0,10,0,10"/>
         </StackPanel>
     </Grid>
 </Window>

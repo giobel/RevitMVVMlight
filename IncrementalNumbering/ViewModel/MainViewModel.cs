@@ -14,28 +14,13 @@ namespace IncrementalNumbering.ViewModel
         private readonly UIDocument uidoc = null;
 
 
-        #region ParameterName
-        //string _parameterName;
-
         public Parameter SelectedParameter { get; set; }
-        //{
-        //    get
-        //    {
-        //        return _parameterName;
-        //    }
-        //    set
-        //    {
-        //        if (_parameterName == value)
-        //            return;
-        //        _parameterName = value;
-        //        RaisePropertyChanged("ParameterName");
-        //    }
-        //}
-        #endregion
-        
+        public Category SelectedCategory { get; set; }
+        public string OperatorValue { get; set; }
+        public string SelectedValue { get; set; }
+
         public string StartNumber { get; set; }
 
-        public List<string> Categories { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -60,8 +45,10 @@ namespace IncrementalNumbering.ViewModel
 
         private void Increment()
         {
-            Handler.m_StartNumber = StartNumber;
+            Handler.m_OperatorValue = OperatorValue;
             Handler.m_ParameterName = SelectedParameter;
+            Handler.m_CategorySelected = SelectedCategory;
+            Handler.m_SelectedValue = SelectedValue;
             MakeRequest(Model.Request.RequestId.Increment);
         }
 

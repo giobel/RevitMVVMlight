@@ -2,13 +2,14 @@
 using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace IncrementalNumbering.Model
 {
     class IncrementNumber
     {
-        public static void Increment(UIApplication uiapp, Parameter parameterName, string startNumber)
+        public static void Increment(UIApplication uiapp, Category CategorySelected, Parameter parameterName, string OperatorValue, string SelectedValue)
         {
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Document doc = uiapp.ActiveUIDocument.Document;
@@ -16,10 +17,13 @@ namespace IncrementalNumbering.Model
             //double convertedStartNumber = Double.Parse(startNumber);
             bool flag = true;
 
+            Selection selElements = uidoc.Selection;
 
-            TaskDialog.Show("R", parameterName.Definition.Name);
+            ICollection<Element> idTxt = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(CategorySelected.Id).ToElements();
 
-
+            ICollection<ElementId> selectedIds = idTxt.Where(x => x.LookupParameter(parameterName.Definition.Name).AsValueString() == SelectedValue).Select(x=>x.Id).ToList();
+            
+            selElements.SetElementIds(selectedIds);
 
             //while (flag)
             //{

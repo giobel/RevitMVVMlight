@@ -14,10 +14,13 @@ namespace IncrementalNumbering.Model
     /// </summary>
     public class RequestHandler : IExternalEventHandler
     {
-        public string m_StartNumber { get; set; }
+        public string m_OperatorValue { get; set; }
+        public Category m_CategorySelected { get; set; }
         public Parameter m_ParameterName { get; set; }
+        public string m_SelectedValue { get; set; }
 
         private Request m_request = new Request();
+        
 
         public Request Request {
             get {
@@ -36,7 +39,7 @@ namespace IncrementalNumbering.Model
                         }
                     case Model.Request.RequestId.Increment:
                         {
-                            Model.IncrementNumber.Increment(uiapp, m_ParameterName, m_StartNumber);
+                            Model.IncrementNumber.Increment(uiapp, m_CategorySelected, m_ParameterName, m_OperatorValue, m_SelectedValue);
                             break;
                         }
                     default:
