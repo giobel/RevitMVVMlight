@@ -32,7 +32,7 @@ namespace IncrementalNumbering
             
             
         }
-        private void CategoriesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ComboBoxCategories_TextChanged(object sender, TextChangedEventArgs e)
         {
             //https://stackoverflow.com/questions/11089104/operation-is-not-valid-while-itemssource-is-in-use-access-and-modify-elements-w
             parameters.SelectedIndex = -1;
@@ -43,12 +43,22 @@ namespace IncrementalNumbering
             parameters.DisplayMemberPath = "Definition.Name";
         }
 
-        private void parameters_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+
+
+        //private void parameters_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+
+        //}
+
+        private void ComboBoxParameters_TextChanged(object sender, TextChangedEventArgs e)
         {
             parameterValue.ItemsSource = GetParameterValue(_doc, cboxCategories.SelectedItem as Category, parameters.SelectedItem as Parameter);
 
             operatorValue.SelectedIndex = 0;
         }
+
+        
 
         #region HELPERS
         private List<Category> GetCategories(Document doc)
@@ -139,9 +149,10 @@ namespace IncrementalNumbering
             return Regex.Replace(input, "[0-9]+", match => match.Value.PadLeft(10, '0'));
         }
 
+
+
+
         #endregion
-
-
 
     }
     internal static class Extensions

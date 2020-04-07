@@ -19,8 +19,6 @@ namespace IncrementalNumbering.ViewModel
         public string OperatorValue { get; set; }
         public string SelectedValue { get; set; }
 
-        public string StartNumber { get; set; }
-
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
