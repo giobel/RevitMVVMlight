@@ -21,8 +21,20 @@ namespace IncrementalNumbering.Model
 
             ICollection<Element> idTxt = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(CategorySelected.Id).ToElements();
 
-            ICollection<ElementId> selectedIds = idTxt.Where(x => x.LookupParameter(parameterName.Definition.Name).AsValueString() == SelectedValue).Select(x=>x.Id).ToList();
-            
+            ICollection<ElementId> selectedIds = null;
+
+            if (SelectedValue == null)
+            {
+                selectedIds = idTxt.Select(x => x.Id).ToList();
+            }
+            else
+            {
+                
+
+                selectedIds = idTxt.Where(x => Helpers.ParameterValueToString(x, parameterName) == SelectedValue).Select(x => x.Id).ToList();
+
+            }
+
             selElements.SetElementIds(selectedIds);
 
             //while (flag)

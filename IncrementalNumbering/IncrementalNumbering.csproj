@@ -85,6 +85,7 @@
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Helpers.cs" />
     <Compile Include="Model\IncrementNumber.cs" />
     <Compile Include="Model\Request.cs" />
     <Compile Include="Model\RequestHandler.cs" />

@@ -26,10 +26,11 @@ namespace IncrementalNumbering
         }
         private void CategoriesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            //https://stackoverflow.com/questions/11089104/operation-is-not-valid-while-itemssource-is-in-use-access-and-modify-elements-w
             parameters.SelectedIndex = -1;
             parameters.ClearValue(ItemsControl.ItemsSourceProperty);
             
-            parameters.ItemsSource = GetParamValues(_doc, cboxCategories.SelectedItem as Category);
+            parameters.ItemsSource = GetParam(_doc, cboxCategories.SelectedItem as Category);
 
             parameters.DisplayMemberPath = "Definition.Name";
         }
@@ -37,22 +38,14 @@ namespace IncrementalNumbering
         private void parameters_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             parameterValue.ItemsSource = GetParameterValue(_doc, cboxCategories.SelectedItem as Category, parameters.SelectedItem as Parameter);
+
+            operatorValue.SelectedIndex = 0;
         }
 
         #region HELPERS
         private List<Category> GetCategories(Document doc)
         {
-            //List<Category> catNames = new List<Category>();
-
-            //foreach (Category c in doc.Settings.Categories)
-            //{
-            //    if (c.AllowsBoundParameters)
-
-            //        catNames.Add(c);
-            //}
-            ////catNames.Sort();
-            //return catNames;
-            //Create collector to collect all elements on active view
+ 
             FilteredElementCollector collector = new FilteredElementCollector(doc, doc.ActiveView.Id);
 
             //get distinct categories of elements in the active view
@@ -65,48 +58,41 @@ namespace IncrementalNumbering
                                 .OrderBy(x => x.Name)
                                 .ToList();
 
-
             return categories;
         }
 
-        private IList<Parameter> GetParamValues(Document doc, Category cat)
+        private IList<Parameter> GetParam(Document doc, Category cat)
         {
-            Element e = new FilteredElementCollector(doc).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements().First();
-            // Two choices: 
-            // Element.Parameters property -- Retrieves 
-            // a set containing all  the parameters.
-            // GetOrderedParameters method -- Gets the 
-            // visible parameters in order.
+            Element e = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements().First();
 
-            IList<Parameter> ps = e.GetOrderedParameters();
+            //IList<Parameter> ps = e.Parameters .GetOrderedParameters();
+            IList<Parameter> ps = new List<Parameter>(e.Parameters.Size);
 
-            //List<string> param_names = new List<string>(
-            //  ps.Count);
+            foreach (Parameter parameter in e.Parameters)
+            {
+                ps.Add(parameter);
+            }
 
-            //foreach (Parameter p in ps)
-            //{
-            //    // AsValueString displays the value as the 
-            //    // user sees it. In some cases, the underlying
-            //    // database value returned by AsInteger, AsDouble,
-            //    // etc., may be more relevant.
+            IEnumerable<Parameter> sortedEnum = ps.OrderBy(f => f.Definition.Name);
+            IList<Parameter> sortedList = sortedEnum.ToList();
 
-            //    param_names.Add(p.Definition.Name);
-            //}
-            //return param_names;
-            return ps;
+            return sortedList;
         }
 
         private List<string> GetParameterValue(Document doc, Category cat, Parameter p)
         {
             List<string> results = new List<string> ();
 
-            IList<Element> elements = new FilteredElementCollector(doc).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements();
+            IList<Element> elements = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements();
 
             try
             {
                 foreach (Element element in elements)
                 {
-                    string paramValue = element.LookupParameter(p.Definition.Name).AsValueString();
+
+                    //string paramValue = element.LookupParameter(p.Definition.Name).AsString();
+                    string paramValue = Helpers.ParameterValueToString(element, p);
+
                     if (!results.Contains(paramValue))
                         results.Add(paramValue);
                 }
@@ -115,9 +101,17 @@ namespace IncrementalNumbering
 
             catch { };
 
+            results.Sort();
+
             return results;
         }
+
+
+
         #endregion
+
+
+
     }
 
     class CategoryComparer : IEqualityComparer<Category>
