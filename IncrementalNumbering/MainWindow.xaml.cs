@@ -3,10 +3,10 @@ using System.Windows;
 using System.Windows.Controls;
 using Autodesk.Revit.DB;
 using System.Linq;
-using System.Collections;
 using System.Text.RegularExpressions;
 using System;
-using Autodesk.Revit.UI;
+using System.Reflection;
+using System.ComponentModel;
 
 namespace IncrementalNumbering
 {
@@ -24,10 +24,10 @@ namespace IncrementalNumbering
             cboxCategories.ItemsSource = GetCategories(doc);
             cboxCategories.DisplayMemberPath = "Name";
 
-            operatorValue.ItemsSource = new List<string> {  Helpers.Operators.Equal.ToString(),
-                                                            Helpers.Operators.Larger.ToString(),
-                                                            Helpers.Operators.Smaller.ToString(),
-                                                            Helpers.Operators.Not_Equal.ToString(),
+            operatorValue.ItemsSource = new List<string> {  Helpers.Operators.Equal.ToDescription(),
+                                                            Helpers.Operators.Larger.ToDescription(),
+                                                            Helpers.Operators.Smaller.ToDescription(),
+                                                            Helpers.Operators.Not_Equal.ToDescription()
                                                         };
             
             
@@ -144,7 +144,15 @@ namespace IncrementalNumbering
 
 
     }
-
+    internal static class Extensions
+    {
+        public static string ToDescription(this Enum value)
+        {
+            FieldInfo field = value.GetType().GetField(value.ToString());
+            DescriptionAttribute attribute = Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute)) as DescriptionAttribute;
+            return attribute == null ? value.ToString() : attribute.Description;
+        }
+    }
     class CategoryComparer : IEqualityComparer<Category>
     {
         #region Implementation of IEqualityComparer<in Category>

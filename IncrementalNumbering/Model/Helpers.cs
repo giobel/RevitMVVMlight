@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Autodesk.Revit.DB;
+using System.ComponentModel;
+
 
 namespace IncrementalNumbering
 {
@@ -60,9 +62,13 @@ namespace IncrementalNumbering
 
         public enum Operators
         {
+            [Description("=")]
             Equal,
+            [Description(">")]
             Larger,
+            [Description("<")]
             Smaller,
+            [Description("!=")]
             Not_Equal
         }
     }
