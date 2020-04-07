@@ -12,8 +12,13 @@ namespace IncrementalNumbering
         public static string ParameterValueToString(Element e, Parameter p)
         {
             string value;
+            
+            if (e.LookupParameter(p.Definition.Name) == null)
+            {
+                return null;
+            }
+            
             StorageType parameterType = p.StorageType;
-
 
             if (StorageType.Double == parameterType)
             {
@@ -23,11 +28,11 @@ namespace IncrementalNumbering
 
                 if (p.DisplayUnitType == DisplayUnitType.DUT_CUBIC_METERS)
                 {
-                    value = $"{convertedValue} m\xb3";
+                    value = $"{convertedValue.ToString("0.00")} m\xb3";
                 }
                 else if (p.DisplayUnitType == DisplayUnitType.DUT_SQUARE_METERS)
                 {
-                    value = $"{convertedValue} m\xb2";
+                    value = $"{convertedValue.ToString("0.00")} m\xb2";
                 }
                 else {
                     value = convertedValue.ToString();

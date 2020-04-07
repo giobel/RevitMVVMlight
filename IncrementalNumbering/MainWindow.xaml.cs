@@ -3,6 +3,10 @@ using System.Windows;
 using System.Windows.Controls;
 using Autodesk.Revit.DB;
 using System.Linq;
+using System.Collections;
+using System.Text.RegularExpressions;
+using System;
+using Autodesk.Revit.UI;
 
 namespace IncrementalNumbering
 {
@@ -49,68 +53,91 @@ namespace IncrementalNumbering
         #region HELPERS
         private List<Category> GetCategories(Document doc)
         {
- 
-            FilteredElementCollector collector = new FilteredElementCollector(doc, doc.ActiveView.Id);
+            try
+            {
+                FilteredElementCollector collector = new FilteredElementCollector(doc, doc.ActiveView.Id);
 
-            //get distinct categories of elements in the active view
-            List<Category> categories =
-                            collector
-                                .ToElements()
-                                .Select(x => x.Category)
-                                .Where(x => x != null && x.Name != null)
-                                .Distinct(new CategoryComparer())
-                                .OrderBy(x => x.Name)
-                                .ToList();
+                //get distinct categories of elements in the active view
+                List<Category> categories =
+                                collector
+                                    .ToElements()
+                                    .Select(x => x.Category)
+                                    .Where(x => x != null && x.Name != null)
+                                    .Distinct(new CategoryComparer())
+                                    .OrderBy(x => x.Name)
+                                    .ToList();
 
-            return categories;
+                return categories;
+
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private IList<Parameter> GetParam(Document doc, Category cat)
         {
-            Element e = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements().First();
+            IList<Parameter> ps = new List<Parameter>();
 
-            //IList<Parameter> ps = e.Parameters .GetOrderedParameters();
-            IList<Parameter> ps = new List<Parameter>(e.Parameters.Size);
-
-            foreach (Parameter parameter in e.Parameters)
+            try
             {
-                ps.Add(parameter);
+                if (cat != null)
+                {
+                    Element e = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements().First();
+
+                    //IList<Parameter> ps = e.Parameters .GetOrderedParameters();
+
+                    foreach (Parameter parameter in e.Parameters)
+                    {
+                        ps.Add(parameter);
+                    }
+                }
+                IEnumerable<Parameter> sortedEnum = ps.OrderBy(f => f.Definition.Name);
+                IList<Parameter> sortedList = sortedEnum.ToList();
+
+                return sortedList;
             }
+            catch { return null; }
 
-            IEnumerable<Parameter> sortedEnum = ps.OrderBy(f => f.Definition.Name);
-            IList<Parameter> sortedList = sortedEnum.ToList();
 
-            return sortedList;
         }
 
         private List<string> GetParameterValue(Document doc, Category cat, Parameter p)
         {
-            List<string> results = new List<string> ();
-
-            IList<Element> elements = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements();
-
+            
             try
             {
+                List<string> results = new List<string>();
+
+                IList<Element> elements = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements();
+
                 foreach (Element element in elements)
-                {
+                {           
+                //string paramValue = element.LookupParameter(p.Definition.Name).AsString();
+                string paramValue = Helpers.ParameterValueToString(element, p);
 
-                    //string paramValue = element.LookupParameter(p.Definition.Name).AsString();
-                    string paramValue = Helpers.ParameterValueToString(element, p);
-
-                    if (!results.Contains(paramValue))
-                        results.Add(paramValue);
+                if (paramValue != null && !results.Contains(paramValue))
+                    results.Add(paramValue);
                 }
+                List<string> sortedResult = results.OrderBy(x => PadNumbers(x)).ToList();
 
+
+                return sortedResult;
             }
 
-            catch { };
+            catch
+            {
+                return null; 
+            };
 
-            results.Sort();
 
-            return results;
         }
 
-
+        public static string PadNumbers(string input)
+        {
+            return Regex.Replace(input, "[0-9]+", match => match.Value.PadLeft(10, '0'));
+        }
 
         #endregion
 
@@ -136,4 +163,7 @@ namespace IncrementalNumbering
 
         #endregion
     }
+
+
+
 }
