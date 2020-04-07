@@ -14,11 +14,25 @@ namespace IncrementalNumbering
             string value;
             StorageType parameterType = p.StorageType;
 
+
             if (StorageType.Double == parameterType)
             {
-                value = UnitUtils.ConvertFromInternalUnits(e.LookupParameter(p.Definition.Name).AsDouble(),
-                    p.DisplayUnitType).ToString();
+                double paramValue = e.LookupParameter(p.Definition.Name).AsDouble();
 
+                double convertedValue =  Math.Round(UnitUtils.ConvertFromInternalUnits(paramValue, p.DisplayUnitType),2);
+
+                if (p.DisplayUnitType == DisplayUnitType.DUT_CUBIC_METERS)
+                {
+                    value = $"{convertedValue} m\xb3";
+                }
+                else if (p.DisplayUnitType == DisplayUnitType.DUT_SQUARE_METERS)
+                {
+                    value = $"{convertedValue} m\xb2";
+                }
+                else {
+                    value = convertedValue.ToString();
+                }
+               
             }
             else if (StorageType.String == parameterType)
             {
@@ -37,6 +51,14 @@ namespace IncrementalNumbering
 
 
             return value;
+        }
+
+        public enum Operators
+        {
+            Equal,
+            Larger,
+            Smaller,
+            Not_Equal
         }
     }
 }

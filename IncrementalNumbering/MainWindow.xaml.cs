@@ -20,7 +20,11 @@ namespace IncrementalNumbering
             cboxCategories.ItemsSource = GetCategories(doc);
             cboxCategories.DisplayMemberPath = "Name";
 
-            operatorValue.ItemsSource = new List<string> { "=", ">", "<", "!=" };
+            operatorValue.ItemsSource = new List<string> {  Helpers.Operators.Equal.ToString(),
+                                                            Helpers.Operators.Larger.ToString(),
+                                                            Helpers.Operators.Smaller.ToString(),
+                                                            Helpers.Operators.Not_Equal.ToString(),
+                                                        };
             
             
         }

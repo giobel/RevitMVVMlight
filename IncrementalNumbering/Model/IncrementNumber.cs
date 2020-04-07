@@ -27,12 +27,22 @@ namespace IncrementalNumbering.Model
             {
                 selectedIds = idTxt.Select(x => x.Id).ToList();
             }
+            else if (OperatorValue == Helpers.Operators.Equal.ToString())
+            {
+                selectedIds = idTxt.Where(x => Helpers.ParameterValueToString(x, parameterName) == SelectedValue).Select(x => x.Id).ToList();
+            }
+            else if (OperatorValue == Helpers.Operators.Larger.ToString())
+            {
+                selectedIds = idTxt.Where(x => Double.Parse(Helpers.ParameterValueToString(x, parameterName)) > Double.Parse(SelectedValue)).Select(x => x.Id).ToList();
+            }
+            else if (OperatorValue == Helpers.Operators.Smaller.ToString())
+            {
+                selectedIds = idTxt.Where(x => Double.Parse(Helpers.ParameterValueToString(x, parameterName)) < Double.Parse(SelectedValue)).Select(x => x.Id).ToList();
+            }
+            //else must be not equal
             else
             {
-                
-
-                selectedIds = idTxt.Where(x => Helpers.ParameterValueToString(x, parameterName) == SelectedValue).Select(x => x.Id).ToList();
-
+                selectedIds = idTxt.Where(x => Helpers.ParameterValueToString(x, parameterName) != SelectedValue).Select(x => x.Id).ToList();
             }
 
             selElements.SetElementIds(selectedIds);

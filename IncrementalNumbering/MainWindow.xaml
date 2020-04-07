@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:IncrementalNumbering"
              xmlns:vm="clr-namespace:IncrementalNumbering.ViewModel"
-             mc:Ignorable="d" Height="300" Width="250" Opacity="1" Topmost="True" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ShowInTaskbar="True" Title="Filter Elements Selector">
+             mc:Ignorable="d" Height="300" Width="250" Opacity="1" Topmost="True" WindowStartupLocation="CenterOwner" WindowStyle="ToolWindow" ShowInTaskbar="True" Title="Filter Elements Selector In View">
     <Window.DataContext>
         <vm:MainViewModel/>
     </Window.DataContext>
