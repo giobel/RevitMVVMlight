@@ -77,6 +77,9 @@ namespace IncrementalNumbering
                                     .OrderBy(x => x.Name)
                                     .ToList();
 
+                //add sheets category
+                categories.Add(doc.Settings.Categories.get_Item(BuiltInCategory.OST_Sheets));
+
                 return categories;
 
             }
@@ -94,14 +97,28 @@ namespace IncrementalNumbering
             {
                 if (cat != null)
                 {
-                    Element e = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements().First();
+                    Element e;
+
+                    if (cat.Name == "Sheets")
+                    {
+                        e = new FilteredElementCollector(doc).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements().First();
+                    }
 
                     //IList<Parameter> ps = e.Parameters .GetOrderedParameters();
+
+                    else
+                    {
+                        e = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements().First();
+
+                        //IList<Parameter> ps = e.Parameters .GetOrderedParameters();
+                    }
 
                     foreach (Parameter parameter in e.Parameters)
                     {
                         ps.Add(parameter);
                     }
+
+
                 }
                 IEnumerable<Parameter> sortedEnum = ps.OrderBy(f => f.Definition.Name);
                 IList<Parameter> sortedList = sortedEnum.ToList();
@@ -119,8 +136,18 @@ namespace IncrementalNumbering
             try
             {
                 List<string> results = new List<string>();
+                IList<Element> elements;
+                
+                if (cat.Name == "Sheets")
+                {
+                    elements = new FilteredElementCollector(doc).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements();
 
-                IList<Element> elements = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements();
+                }
+                else
+                {
+                    elements = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(cat.Id).WhereElementIsNotElementType().ToElements();
+
+                }
 
                 foreach (Element element in elements)
                 {           

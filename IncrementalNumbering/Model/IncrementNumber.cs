@@ -15,8 +15,16 @@ namespace IncrementalNumbering.Model
             Document doc = uiapp.ActiveUIDocument.Document;
 
             Selection selElements = uidoc.Selection;
+            ICollection<Element> idTxt;
 
-            ICollection<Element> idTxt = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(CategorySelected.Id).ToElements();
+            if (CategorySelected.Name == "Sheets")
+            {
+                idTxt = new FilteredElementCollector(doc).OfCategoryId(CategorySelected.Id).ToElements();
+            }
+            else
+            {
+                idTxt = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(CategorySelected.Id).ToElements();
+            }
 
             ICollection<ElementId> selectedIds = new List<ElementId>();
 
