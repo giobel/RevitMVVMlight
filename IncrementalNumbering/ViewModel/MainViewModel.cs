@@ -18,7 +18,8 @@ namespace IncrementalNumbering.ViewModel
         public Category SelectedCategory { get; set; }
         public string OperatorValue { get; set; }
         public string SelectedValue { get; set; }
-
+        public bool WholeProject { get; set; }
+        public bool SelectedViewports { get; set; }
 
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
@@ -47,6 +48,8 @@ namespace IncrementalNumbering.ViewModel
             Handler.m_ParameterName = SelectedParameter;
             Handler.m_CategorySelected = SelectedCategory;
             Handler.m_SelectedValue = SelectedValue;
+            Handler.m_WholeProject = WholeProject;
+            Handler.m_SelectedViewports = SelectedViewports;
             MakeRequest(Model.Request.RequestId.Increment);
         }
 

@@ -18,6 +18,8 @@ namespace IncrementalNumbering.Model
         public Category m_CategorySelected { get; set; }
         public Parameter m_ParameterName { get; set; }
         public string m_SelectedValue { get; set; }
+        public bool m_WholeProject { get; set; }
+        public bool m_SelectedViewports { get; set; }
 
         private Request m_request = new Request();
         
@@ -39,7 +41,7 @@ namespace IncrementalNumbering.Model
                         }
                     case Model.Request.RequestId.Increment:
                         {
-                            Model.IncrementNumber.Increment(uiapp, m_CategorySelected, m_ParameterName, m_OperatorValue, m_SelectedValue);
+                            Model.IncrementNumber.Increment(uiapp, m_CategorySelected, m_ParameterName, m_OperatorValue, m_SelectedValue, m_WholeProject, m_SelectedViewports);
                             break;
                         }
                     default:

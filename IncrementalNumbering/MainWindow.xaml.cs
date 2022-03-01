@@ -41,21 +41,16 @@ namespace IncrementalNumbering
             parameters.ItemsSource = GetParam(_doc, cboxCategories.SelectedItem as Category);
 
             parameters.DisplayMemberPath = "Definition.Name";
+
+            //operatorValue.SelectedIndex = 0;
         }
 
-
-
-
-        //private void parameters_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-
-        //}
 
         private void ComboBoxParameters_TextChanged(object sender, TextChangedEventArgs e)
         {
             parameterValue.ItemsSource = GetParameterValue(_doc, cboxCategories.SelectedItem as Category, parameters.SelectedItem as Parameter);
 
-            operatorValue.SelectedIndex = 0;
+//            operatorValue.SelectedIndex = -1;
         }
 
         

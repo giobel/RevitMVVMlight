@@ -9,13 +9,33 @@ namespace IncrementalNumbering.Model
 {
     class IncrementNumber
     {
-        public static void Increment(UIApplication uiapp, Category CategorySelected, Parameter parameterName, string OperatorValue, string SelectedValue)
+        public static void Increment(UIApplication uiapp, Category CategorySelected, Parameter parameterName, string OperatorValue, string SelectedValue, bool WholeProject, bool SelectedViewports)
         {
             UIDocument uidoc = uiapp.ActiveUIDocument;
             Document doc = uiapp.ActiveUIDocument.Document;
 
-            Selection selElements = uidoc.Selection;
-            ICollection<Element> idTxt;
+            Selection selElements = null;
+            IList<ElementId> viewportViewIds = null;
+
+            if (!SelectedViewports)
+            {
+                selElements = uidoc.Selection;
+            }
+            else
+            {
+                ICollection<ElementId> viewportIds = uidoc.Selection.GetElementIds();
+
+                viewportViewIds = new List<ElementId>();
+
+                foreach (ElementId r in viewportIds)
+                {
+                    Viewport vp = doc.GetElement(r) as Viewport;
+                    viewportViewIds.Add(vp.ViewId);
+                }
+            }
+
+
+            ICollection<Element> idTxt = new List<Element>();
 
             if (CategorySelected.Name == "Sheets")
             {
@@ -23,7 +43,28 @@ namespace IncrementalNumbering.Model
             }
             else
             {
-                idTxt = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(CategorySelected.Id).ToElements();
+                if (WholeProject)
+                {
+                    idTxt = new FilteredElementCollector(doc).OfCategoryId(CategorySelected.Id).ToElements();
+                }
+                else if (SelectedViewports)
+                {
+                    foreach (ElementId viewId in viewportViewIds)
+                    {
+                        IList<Element> elements = new FilteredElementCollector(doc, viewId).OfCategoryId(CategorySelected.Id).ToElements();
+
+                        foreach (Element item in elements)
+                        {
+                            idTxt.Add(item);
+                        }                        
+                    }
+                    
+                }
+                else
+                {
+                    idTxt = new FilteredElementCollector(doc, doc.ActiveView.Id).OfCategoryId(CategorySelected.Id).ToElements();
+                }
+
             }
 
             ICollection<ElementId> selectedIds = new List<ElementId>();
@@ -77,7 +118,9 @@ namespace IncrementalNumbering.Model
             };
             }
             catch(Exception ex) { TaskDialog.Show("R", ex.Message); }
-            selElements.SetElementIds(selectedIds);
+
+            //selElements.SetElementIds(selectedIds);
+            uidoc.Selection.SetElementIds(selectedIds);
 
         }//close method
 
